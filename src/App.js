@@ -11,7 +11,8 @@ class App extends React.Component {
       username: '',
       password: '',
       user: null,
-      error: null,
+      note: null,
+      noteName: '',
       title: '',
       author: '',
       url: ''
@@ -41,10 +42,16 @@ class App extends React.Component {
     const newBlog = await blogService.create(blogObject)
     this.setState({
       blogs: this.state.blogs.concat(newBlog),
+      note: `a new blog '${newBlog.title}' by ${newBlog.author} added`,
+      noteName: 'add',
       title: '',
       author: '',
       url: ''
     })
+
+    setTimeout(() => {
+      this.setState({ note: null, noteName: '' })
+    }, 5000);
 
   }
 
@@ -66,10 +73,11 @@ class App extends React.Component {
       })
     } catch (exception) {
       this.setState({
-        error: 'käyttäjätunnus tai salasana virheellinen'
+        note: 'käyttäjätunnus tai salasana virheellinen',
+        noteName: 'error'
       })
       setTimeout(() => {
-        this.setState({ error: null })
+        this.setState({ note: null, noteName: '' })
       }, 5000);
     }
   }
@@ -78,35 +86,7 @@ class App extends React.Component {
     this.setState({ [event.target.name]: event.target.value })
   }
 
-  render() {
-    if (this.state.user === null) {
-      return (
-        <div>
-          <h2>Log in to application</h2>
-          <form onSubmit={this.login}>
-            <div>
-              username: &nbsp;
-              <input
-                type="text"
-                name="username"
-                value={this.state.username}
-                onChange={this.handleChange}
-              />
-            </div>
-            <div>
-              password: &nbsp;
-              <input
-                type="password"
-                name="password"
-                value={this.state.password}
-                onChange={this.handleChange}
-              />
-            </div>
-            <button type="submit">login</button>
-          </form>
-        </div>
-      )
-    }
+  blogForm = () => {
     return (
       <div>
         <h2>blogs</h2>
@@ -149,7 +129,58 @@ class App extends React.Component {
           </form>
         </div>
       </div>
-    );
+    )
+  }
+
+  loginForm = () => {
+    return (
+      <div>
+          <h2>Log in to application</h2>
+          <form onSubmit={this.login}>
+            <div>
+              username: &nbsp;
+              <input
+                type="text"
+                name="username"
+                value={this.state.username}
+                onChange={this.handleChange}
+              />
+            </div>
+            <div>
+              password: &nbsp;
+              <input
+                type="password"
+                name="password"
+                value={this.state.password}
+                onChange={this.handleChange}
+              />
+            </div>
+            <button type="submit">login</button>
+          </form>
+        </div>
+    )
+  }
+
+  notification = () => {
+    if (this.state.note === null) {
+      return null
+    }
+    return (
+      <div className={this.state.noteName}>
+        {this.state.note}
+      </div>
+    )
+  }
+
+  render() {
+    return (
+      <div>
+        {this.notification()}
+        {this.state.user === null ?
+          this.loginForm() :
+          this.blogForm()}
+      </div>
+    )
   }
 }
 
