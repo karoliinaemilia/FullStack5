@@ -27,6 +27,14 @@ class Blog extends React.Component {
     this.setState({ likes: this.state.likes + 1})
   }
 
+  handleDeleteClick = () => {
+    const blog = this.props.blog
+    if (window.confirm(`delete ${blog.title} by ${blog.author}`)) {
+      blogService.deleteBlog(blog._id)
+      this.props.deleteBlog(blog._id)
+    }
+  }
+
   render() {
     const blogStyle = {
       paddingTop: 10,
@@ -36,7 +44,25 @@ class Blog extends React.Component {
       borderWidth: 1,
       marginBottom: 5
     }
+
+    
     const blog = this.props.blog
+
+    let show 
+
+    if (blog.user === undefined) {
+      show = ''
+    } else if (blog.user.username === this.props.userNow.username) {
+      show = ''
+    } else {
+      show = 'none'
+    }
+    
+    const deleteButtonStyle = {
+      borderRadius: 5,
+      backgroundColor: 'rgb(30,144,255)',
+      display: show
+    }
 
     let username
     if (blog.user === undefined) {
@@ -58,6 +84,8 @@ class Blog extends React.Component {
           &nbsp; {this.state.likes} likes &nbsp; <button onClick={this.handleLikeClick}>like</button>
           <br/>
           &nbsp; added by {username}
+          <br />
+          &nbsp; <button style={deleteButtonStyle} onClick={this.handleDeleteClick}>delete</button>
         </div>
       </div>
     )

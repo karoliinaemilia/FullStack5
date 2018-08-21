@@ -87,6 +87,11 @@ class App extends React.Component {
     this.setState({ [event.target.name]: event.target.value })
   }
 
+  deleteBlog = (blogId) => {
+    const deleted = this.state.blogs.filter(blog => blog._id !== blogId)
+    this.setState({ blogs: deleted })
+  }
+
   blogForm = () => {
     const sortedBlogs = this.state.blogs.sort(function(a,b) {
       return a.likes < b.likes
@@ -100,7 +105,7 @@ class App extends React.Component {
         </div>
         <br/>
           {sortedBlogs.map(blog => 
-            <Blog key={blog._id} blog={blog}/>
+            <Blog key={blog._id} blog={blog} deleteBlog={this.deleteBlog} userNow={this.state.user}/>
           )}
         <br/>
         <div>
