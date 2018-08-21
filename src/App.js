@@ -70,7 +70,7 @@ class App extends React.Component {
       this.setState({
         username: '',
         password: '',
-        user
+        user: user
       })
     } catch (exception) {
       this.setState({
@@ -88,6 +88,9 @@ class App extends React.Component {
   }
 
   blogForm = () => {
+    const sortedBlogs = this.state.blogs.sort(function(a,b) {
+      return a.likes < b.likes
+    })
     return (
       <div>
         <h2>blogs</h2>
@@ -96,7 +99,7 @@ class App extends React.Component {
           <button onClick={() => {window.localStorage.removeItem('loggedBlogappUser')}}>logout</button>
         </div>
         <br/>
-          {this.state.blogs.map(blog => 
+          {sortedBlogs.map(blog => 
             <Blog key={blog._id} blog={blog}/>
           )}
         <br/>

@@ -36,8 +36,14 @@ class Blog extends React.Component {
       borderWidth: 1,
       marginBottom: 5
     }
-
     const blog = this.props.blog
+
+    let username
+    if (blog.user === undefined) {
+      username = 'anonymous'
+    } else {
+      username = blog.user.name
+    }
 
     const showWhenVisible = { display: this.state.visible ? '' : 'none'}
     
@@ -51,7 +57,7 @@ class Blog extends React.Component {
           <br/>
           &nbsp; {this.state.likes} likes &nbsp; <button onClick={this.handleLikeClick}>like</button>
           <br/>
-          &nbsp; added by {blog.username}
+          &nbsp; added by {username}
         </div>
       </div>
     )
