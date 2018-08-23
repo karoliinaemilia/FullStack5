@@ -76,10 +76,10 @@ class Blog extends React.Component {
     
     return (
       <div style={blogStyle}>
-        <div onClick={this.toggleVisibility} style={{cursor: 'pointer'}}>
+        <div className="names" onClick={this.toggleVisibility} style={{cursor: 'pointer'}}>
           {blog.title} {blog.author}
         </div>
-        <div style={showWhenVisible}>
+        <div className="content" style={showWhenVisible}>
           &nbsp; <a href={blog.url}>{blog.url}</a>
           <br/>
           &nbsp; {this.state.likes} likes &nbsp; <button onClick={this.handleLikeClick}>like</button>
